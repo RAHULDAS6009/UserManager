@@ -1,6 +1,7 @@
 import { Modal } from "./generic/Modal";
 import { Input } from "./generic/Input";
 import { Button } from "./generic/Button";
+import { User } from "../types";
 
 const dummyUser = {
   id: 1,
@@ -13,7 +14,7 @@ const dummyUser = {
 interface ProfileEditProps {
   isOpen: boolean;
   closeModal: () => void;
-  user:any
+  user:User;
 }
 
 export const ProfileEdit = ({ isOpen, closeModal ,user}: ProfileEditProps) => {
@@ -32,8 +33,8 @@ export const ProfileEdit = ({ isOpen, closeModal ,user}: ProfileEditProps) => {
             alt=""
           />
         </div>
-        <Input label="First Name" placeholder="Enter first name" defaultValue={user.firstname} />
-        <Input label="Last Name" placeholder="Enter last name" defaultValue={user.lastname} />
+        <Input label="First Name" placeholder="Enter first name" defaultValue={user.first_name} />
+        <Input label="Last Name" placeholder="Enter last name" defaultValue={user.last_name} />
         <Input label="Email" type="email" placeholder="Enter email" defaultValue={user.email} />
 
         <div className="flex justify-end space-x-3">

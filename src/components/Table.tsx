@@ -102,33 +102,41 @@ export const Table = () => {
         </tbody>
       </table>
 
-      <div className="flex justify-center items-center gap-2 mt-4 mb-2">
-        <button
-          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-          disabled={page === 1}
-          className={`px-4 py-2 rounded-md ${page === 1 ? "bg-gray-200 text-gray-500 cursor-not-allowed" : "bg-indigo-500 text-white"}`}
-        >
-          Previous
-        </button>
+      <div className="flex flex-wrap justify-center items-center gap-2 mt-4 mb-2 overflow-x-auto px-2">
+  <button
+    onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+    disabled={page === 1}
+    className={`px-4 py-2 text-sm md:text-base rounded-md ${
+      page === 1 ? "bg-gray-200 text-gray-500 cursor-not-allowed" : "bg-indigo-500 text-white"
+    }`}
+  >
+    Previous
+  </button>
 
-        {[...Array(totalPages)].map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setPage(index + 1)}
-            className={`px-4 py-2 rounded-md ${page === index + 1 ? "bg-indigo-700 text-white" : "bg-indigo-300 text-gray-800"}`}
-          >
-            {index + 1}
-          </button>
-        ))}
+  <div className="flex gap-1 overflow-x-auto">
+    {[...Array(totalPages)].map((_, index) => (
+      <button
+        key={index}
+        onClick={() => setPage(index + 1)}
+        className={`px-3 py-1 md:px-4 md:py-2 text-xs md:text-base rounded-md ${
+          page === index + 1 ? "bg-indigo-700 text-white" : "bg-indigo-300 text-gray-800"
+        }`}
+      >
+        {index + 1}
+      </button>
+    ))}
+  </div>
 
-        <button
-          onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
-          disabled={page === totalPages}
-          className={`px-4 py-2 rounded-md ${page === totalPages ? "bg-gray-200 text-gray-500 cursor-not-allowed" : "bg-indigo-500 text-white"}`}
-        >
-          Next
-        </button>
-      </div>
+  <button
+    onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+    disabled={page === totalPages}
+    className={`px-4 py-2 text-sm md:text-base rounded-md ${
+      page === totalPages ? "bg-gray-200 text-gray-500 cursor-not-allowed" : "bg-indigo-500 text-white"
+    }`}
+  >
+    Next
+  </button>
+</div>
 
       {selectedUser && (
         <ProfileEdit isOpen={isOpen} user={selectedUser} closeModal={() => setOpen(false)} />

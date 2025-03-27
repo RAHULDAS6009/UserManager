@@ -1,13 +1,16 @@
-import "./App.css";
-// import { Table } from "./components/Table";
-import { Table } from "./components/Table";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import SignIn from "./pages/Signin";
+// import UserList from "./pages/UserList";
+import {Table} from "./components/Table";
 
 function App() {
   return (
-    <div className="w-screen h-screen flex items-center justify-center ">
-      {/* <Table/> */}
-      <Table />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<SignIn />} />
+        <Route path="/users" element={<Table />} />
+      </Routes>
+    </Router>
   );
 }
 

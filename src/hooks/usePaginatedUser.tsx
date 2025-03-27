@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { User } from "../types";
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL
 
 
 interface ApiResponse {
@@ -21,7 +22,7 @@ export const usePaginatedUsers = () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(`https://reqres.in/api/users?page=${page}`);
+        const response = await fetch(`${backendUrl}/api/users?page=${page}`);
         const data: ApiResponse = await response.json();
         setUsers(data.data);
         setTotalPages(data.total_pages);
