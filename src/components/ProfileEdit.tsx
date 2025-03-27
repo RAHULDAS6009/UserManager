@@ -3,14 +3,6 @@ import { Input } from "./generic/Input";
 import { Button } from "./generic/Button";
 import { User } from "../types";
 
-const dummyUser = {
-  id: 1,
-  email: "george.bluth@reqres.in",
-  firstname: "George",
-  lastname: "Bluth",
-  avatar: "https://reqres.in/img/faces/1-image.jpg",
-};
-
 interface ProfileEditProps {
   isOpen: boolean;
   closeModal: () => void;
