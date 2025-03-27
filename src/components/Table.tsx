@@ -1,6 +1,7 @@
 import { CircleUserRound, Pencil, Trash } from "lucide-react";
 import { ProfileEdit } from "./ProfileEdit";
 import { useState } from "react";
+import { Modal } from "./generic/Modal";
 
 export interface User {
   id: number;
@@ -32,27 +33,6 @@ const users: User[] = [
     lastname: "Wong",
     avatar: "https://reqres.in/img/faces/3-image.jpg",
   },
-  {
-    id: 4,
-    email: "eve.holt@reqres.in",
-    firstname: "Eve",
-    lastname: "Holt",
-    avatar: "https://reqres.in/img/faces/4-image.jpg",
-  },
-  {
-    id: 5,
-    email: "charles.morris@reqres.in",
-    firstname: "Charles",
-    lastname: "Morris",
-    avatar: "https://reqres.in/img/faces/5-image.jpg",
-  },
-  {
-    id: 6,
-    email: "tracey.ramos@reqres.in",
-    firstname: "Tracey",
-    lastname: "Ramos",
-    avatar: "https://reqres.in/img/faces/6-image.jpg",
-  },
 ];
 
 const TableHead = () => (
@@ -60,34 +40,19 @@ const TableHead = () => (
     <tr>
       {["#", "Avatar", "First Name", "Last Name", "Email", "Actions"].map(
         (heading, index) => (
-          <th
-            key={index}
-            className={`px-6 py-3 ${heading === "Actions" ? "pl-10" : ""}`}
-          >
-            {heading}
-          </th>
+          <th key={index} className="px-6 py-3">{heading}</th>
         )
       )}
     </tr>
   </thead>
 );
 
-const TableRow = ({
-  user,
-  onEdit,
-}: {
-  user: User;
-  onEdit: (user: User) => void;
-}) => (
+const TableRow = ({ user, onEdit, onDelete }: { user: User; onEdit: (user: User) => void; onDelete: (user: User) => void; }) => (
   <tr className="border-b border-gray-200 hover:bg-gray-50">
     <TableCell isHeader>{user.id}</TableCell>
     <TableCell>
       {user.avatar ? (
-        <img
-          className="w-10 h-10 rounded-full border-4 border-indigo-200"
-          src={user.avatar}
-          alt={user.firstname}
-        />
+        <img className="w-10 h-10 rounded-full border-4 border-indigo-200" src={user.avatar} alt={user.firstname} />
       ) : (
         <CircleUserRound className="w-10 h-10" />
       )}
@@ -101,37 +66,42 @@ const TableRow = ({
           onClick={() => onEdit(user)}
           className="text-indigo-400 hover:text-indigo-700 hover:bg-indigo-100 hover:rounded-md p-3 w-10 h-10 cursor-pointer"
         />
-        <Trash className="text-red-400 hover:text-red-700 hover:bg-red-100 hover:rounded-md p-3 w-10 h-10 cursor-pointer" />
+        <Trash
+          onClick={() => onDelete(user)}
+          className="text-red-400 hover:text-red-700 hover:bg-red-100 hover:rounded-md p-3 w-10 h-10 cursor-pointer"
+        />
       </div>
     </TableCell>
   </tr>
 );
 
-const TableCell = ({
-  children,
-  isHeader = false,
-}: {
-  children: React.ReactNode;
-  isHeader?: boolean;
-}) =>
+const TableCell = ({ children, isHeader = false }: { children: React.ReactNode; isHeader?: boolean; }) =>
   isHeader ? (
-    <th
-      scope="row"
-      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-    >
-      {children}
-    </th>
+    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{children}</th>
   ) : (
     <td className="px-6 py-4">{children}</td>
   );
 
 export const Table = () => {
-  const [isOpen, setOpen] = useState<boolean>(false);
+  const [isEditOpen, setEditOpen] = useState<boolean>(false);
+  const [isDeleteOpen, setDeleteOpen] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   const handleEdit = (user: User) => {
     setSelectedUser(user);
-    setOpen(true);
+    setEditOpen(true);
+  };
+
+  const handleDelete = (user: User) => {
+    setSelectedUser(user);
+    setDeleteOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (selectedUser) {
+      console.log("User deleted:", selectedUser);
+      setDeleteOpen(false);
+    }
   };
 
   return (
@@ -140,14 +110,21 @@ export const Table = () => {
         <TableHead />
         <tbody>
           {users.map((user) => (
-            <TableRow key={user.id} user={user} onEdit={handleEdit} />
+            <TableRow key={user.id} user={user} onEdit={handleEdit} onDelete={handleDelete} />
           ))}
         </tbody>
       </table>
 
       {selectedUser && (
-        <ProfileEdit isOpen={isOpen} user={selectedUser} closeModal={() => setOpen(false)} />
+        <ProfileEdit isOpen={isEditOpen} user={selectedUser} closeModal={() => setEditOpen(false)} />
       )}
+
+      <Modal isOpen={isDeleteOpen} onClose={() => setDeleteOpen(false)} title="Confirm Delete" description={`Are you sure you want to delete ${selectedUser?.firstname}?`}>
+        <div className="flex justify-end gap-2 mt-4">
+          <button className="px-4 py-2 bg-gray-300 rounded" onClick={() => setDeleteOpen(false)}>Cancel</button>
+          <button className="px-4 py-2 bg-red-500 text-white rounded" onClick={confirmDelete}>Delete</button>
+        </div>
+      </Modal>
     </div>
   );
 };

@@ -13,7 +13,7 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, descriptio
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-300 bg-opacity-50">
+    <div className="fixed inset-0 z-10 flex items-center justify-center backdrop-blur-sm ">
       <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-6">
         <div className="flex justify-between items-center pb-3">
           <div>
