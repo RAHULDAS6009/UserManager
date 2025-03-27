@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { Input } from "../components/generic/Input";
 import { Button } from "../components/generic/Button";
 
@@ -16,24 +17,15 @@ const SignIn = () => {
     setError("");
 
     try {
-      const response = await fetch(`${backendUrl}/api/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
+      const { data } = await axios.post(`${backendUrl}/api/login`, {
+        email,
+        password,
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Login failed");
-      }
-
-      localStorage.setItem("authToken", data.token); // Store token in localStorage
-      navigate("/users"); // Redirect to the user list page
+      localStorage.setItem("authToken", data.token); 
+      navigate("/users"); 
     } catch (error: any) {
-      setError(error.message);
+      setError(error.response?.data?.message || "Login failed");
     }
   };
 
