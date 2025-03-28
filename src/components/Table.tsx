@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Modal } from "./generic/Modal";
 import { ProfileEdit } from "./ProfileEdit";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 const TableHead = () => (
   <thead className="text-xs text-gray-600 uppercase bg-indigo-100 border border-b-2 border-slate-200">
