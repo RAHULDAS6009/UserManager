@@ -1,8 +1,8 @@
 import { CircleUserRound, Pencil, Trash } from "lucide-react";
 import { backendUrl, usePaginatedUsers } from "../hooks/usePaginatedUser"; 
 import { useState } from "react";
-import { Modal } from "../components/generic/Modal";
-import { ProfileEdit } from "../components/ProfileEdit";
+import { Modal } from "./generic/Modal";
+import { ProfileEdit } from "./ProfileEdit";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -81,9 +81,9 @@ const TableCell = ({
     <td className="px-6 py-4">{children}</td>
   );
 
-export const Table = () => {
+export const Table = ({ searchQuery }: { searchQuery: string }) => {
   const { users, page, totalPages, loading, error, setPage } =
-    usePaginatedUsers();
+    usePaginatedUsers(searchQuery);
   const [isOpen, setOpen] = useState<boolean>(false);
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<any | null>(null);

@@ -9,8 +9,9 @@ interface ApiResponse {
   total_pages: number;
 }
 
-export const usePaginatedUsers = () => {
+export const usePaginatedUsers = (searchQuery: string) => {
   const [users, setUsers] = useState<User[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
@@ -38,5 +39,20 @@ export const usePaginatedUsers = () => {
     fetchUsers();
   }, [fetchUsers]);
 
-  return { users, page, totalPages, loading, error, setPage };
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
+      setFilteredUsers(users);
+    } else {
+      const lowerSearch = searchQuery.toLowerCase();
+      const filtered = users.filter(
+        (user) =>
+          user.first_name.toLowerCase().includes(lowerSearch) ||
+          user.last_name.toLowerCase().includes(lowerSearch) ||
+          user.email.toLowerCase().includes(lowerSearch)
+      );
+      setFilteredUsers(filtered);
+    }
+  }, [searchQuery, users]);
+
+  return { users: filteredUsers, page, totalPages, loading, error, setPage };
 };
