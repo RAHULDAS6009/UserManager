@@ -6,26 +6,22 @@
 Follow these steps to set up the project on your local machine.
 
 ### Prerequisites
-- Node.js (>= 16.x)
-- npm or yarn
+- Node.js
+- npm 
 
 ### Installation
 
 1. Clone the repository:
    ```sh
-   git clone <repository-url>
+   git clone https://github.com/RAHULDAS6009/UserManager.git
    ```
 2. Navigate to the project directory:
    ```sh
-   cd <project-folder>
+   cd UserManager
    ```
 3. Install dependencies:
    ```sh
    npm install
-   ```
-   or
-   ```sh
-   yarn install
    ```
 4. Copy the environment variables file:
    ```sh
@@ -34,10 +30,6 @@ Follow these steps to set up the project on your local machine.
 5. Start the development server:
    ```sh
    npm run dev
-   ```
-   or
-   ```sh
-   yarn dev
    ```
 
 ## Folder Structure
