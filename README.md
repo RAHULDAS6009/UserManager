@@ -1,4 +1,3 @@
-# React Project Setup
 
 🚀 **Deployed Link:** [Live Demo](https://emplowisexyz.vercel.app/)
 
