@@ -22,7 +22,7 @@ const SignIn = () => {
         password,
       });
 
-      localStorage.setItem("authToken", data.token); 
+      localStorage.setItem("token", data.token); 
       navigate("/users"); 
     } catch (error: any) {
       setError(error.response?.data?.message || "Login failed");

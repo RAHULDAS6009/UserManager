@@ -1,15 +1,19 @@
 import { CircleUserRound, Pencil, Trash } from "lucide-react";
-import { usePaginatedUsers } from "../hooks/usePaginatedUser"; // Import hook
+import { backendUrl, usePaginatedUsers } from "../hooks/usePaginatedUser"; 
 import { useState } from "react";
-import { Modal } from "./generic/Modal";
-import { ProfileEdit } from "./ProfileEdit";
+import { Modal } from "../components/generic/Modal";
+import { ProfileEdit } from "../components/ProfileEdit";
+import axios from "axios";
 
 const TableHead = () => (
   <thead className="text-xs text-gray-600 uppercase bg-indigo-100 border border-b-2 border-slate-200">
     <tr>
       {["#", "Avatar", "First Name", "Last Name", "Email", "Actions"].map(
         (heading, index) => (
-          <th key={index} className={`px-6 py-3 ${heading === "Actions" ? "pl-10" : ""}`}>
+          <th
+            key={index}
+            className={`px-6 py-3 ${heading === "Actions" ? "pl-10" : ""}`}
+          >
             {heading}
           </th>
         )
@@ -31,7 +35,11 @@ const TableRow = ({
     <TableCell isHeader>{user.id}</TableCell>
     <TableCell>
       {user.avatar ? (
-        <img className="w-10 h-10 rounded-full border-4 border-indigo-200" src={user.avatar} alt={user.first_name} />
+        <img
+          className="w-10 h-10 rounded-full border-4 border-indigo-200"
+          src={user.avatar}
+          alt={user.first_name}
+        />
       ) : (
         <CircleUserRound className="w-10 h-10" />
       )}
@@ -54,9 +62,18 @@ const TableRow = ({
   </tr>
 );
 
-const TableCell = ({ children, isHeader = false }: { children: React.ReactNode; isHeader?: boolean }) =>
+const TableCell = ({
+  children,
+  isHeader = false,
+}: {
+  children: React.ReactNode;
+  isHeader?: boolean;
+}) =>
   isHeader ? (
-    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+    <th
+      scope="row"
+      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+    >
       {children}
     </th>
   ) : (
@@ -64,7 +81,8 @@ const TableCell = ({ children, isHeader = false }: { children: React.ReactNode; 
   );
 
 export const Table = () => {
-  const { users, page, totalPages, loading, error, setPage } = usePaginatedUsers();
+  const { users, page, totalPages, loading, error, setPage } =
+    usePaginatedUsers();
   const [isOpen, setOpen] = useState<boolean>(false);
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<any | null>(null);
@@ -97,49 +115,66 @@ export const Table = () => {
               </td>
             </tr>
           ) : (
-            users.map((user) => <TableRow key={user.id} user={user} onEdit={handleEdit} onDelete={handleDelete} />)
+            users.map((user) => (
+              <TableRow
+                key={user.id}
+                user={user}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+            ))
           )}
         </tbody>
       </table>
 
       <div className="flex flex-wrap justify-center items-center gap-2 mt-4 mb-2 overflow-x-auto px-2">
-  <button
-    onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-    disabled={page === 1}
-    className={`px-4 py-2 text-sm md:text-base rounded-md ${
-      page === 1 ? "bg-gray-200 text-gray-500 cursor-not-allowed" : "bg-indigo-500 text-white"
-    }`}
-  >
-    Previous
-  </button>
+        <button
+          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          disabled={page === 1}
+          className={`px-4 py-2 text-sm md:text-base rounded-md ${
+            page === 1
+              ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+              : "bg-indigo-500 text-white"
+          }`}
+        >
+          Previous
+        </button>
 
-  <div className="flex gap-1 overflow-x-auto">
-    {[...Array(totalPages)].map((_, index) => (
-      <button
-        key={index}
-        onClick={() => setPage(index + 1)}
-        className={`px-3 py-1 md:px-4 md:py-2 text-xs md:text-base rounded-md ${
-          page === index + 1 ? "bg-indigo-700 text-white" : "bg-indigo-300 text-gray-800"
-        }`}
-      >
-        {index + 1}
-      </button>
-    ))}
-  </div>
+        <div className="flex gap-1 overflow-x-auto">
+          {[...Array(totalPages)].map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setPage(index + 1)}
+              className={`px-3 py-1 md:px-4 md:py-2 text-xs md:text-base rounded-md ${
+                page === index + 1
+                  ? "bg-indigo-700 text-white"
+                  : "bg-indigo-300 text-gray-800"
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
 
-  <button
-    onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
-    disabled={page === totalPages}
-    className={`px-4 py-2 text-sm md:text-base rounded-md ${
-      page === totalPages ? "bg-gray-200 text-gray-500 cursor-not-allowed" : "bg-indigo-500 text-white"
-    }`}
-  >
-    Next
-  </button>
-</div>
+        <button
+          onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+          disabled={page === totalPages}
+          className={`px-4 py-2 text-sm md:text-base rounded-md ${
+            page === totalPages
+              ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+              : "bg-indigo-500 text-white"
+          }`}
+        >
+          Next
+        </button>
+      </div>
 
       {selectedUser && (
-        <ProfileEdit isOpen={isOpen} user={selectedUser} closeModal={() => setOpen(false)} />
+        <ProfileEdit
+          isOpen={isOpen}
+          user={selectedUser}
+          closeModal={() => setOpen(false)}
+        />
       )}
 
       {selectedUser && (
@@ -157,9 +192,16 @@ export const Table = () => {
               Cancel
             </button>
             <button
-              onClick={() => {
-                console.log("User deleted:", selectedUser);
-                setDeleteOpen(false);
+              onClick={async (event) => {
+                event.preventDefault();
+                try {
+                  await axios.delete(
+                    `${backendUrl}/api/users/${selectedUser.id}`
+                  );
+                  setDeleteOpen(false);
+                } catch (error) {
+                  console.error("Error deleting profile:", error);
+                }
               }}
               className="px-4 py-2 bg-red-500 text-white rounded-md"
             >

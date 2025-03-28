@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SignIn from "./pages/Signin";
-// import UserList from "./pages/UserList";
-import {Table} from "./components/Table";
+import {Table} from "./pages/Table";
 
 function App() {
   return (
