@@ -5,6 +5,7 @@ import { Input } from "./generic/Input";
 import { Button } from "./generic/Button";
 import { User } from "../types";
 import { backendUrl } from "../hooks/usePaginatedUser";
+import toast from "react-hot-toast";
 
 interface ProfileEditProps {
   isOpen: boolean;
@@ -29,6 +30,7 @@ export const ProfileEdit = ({ isOpen, closeModal, user }: ProfileEditProps) => {
       const res = await axios.put(`${backendUrl}/api/users/${user.id}`, formData);
       console.log("Profile updated successfully:", res.data);
       closeModal();
+      toast.success(`user updated successfully`)
     } catch (error) {
       console.error("Error updating profile:", error);
     }

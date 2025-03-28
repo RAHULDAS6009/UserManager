@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Input } from "../components/generic/Input";
 import { Button } from "../components/generic/Button";
+import toast, { Toaster } from "react-hot-toast";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -23,6 +24,7 @@ const SignIn = () => {
       });
 
       localStorage.setItem("token", data.token); 
+      toast.success("user logged in");
       navigate("/users"); 
     } catch (error: any) {
       setError(error.response?.data?.message || "Login failed");
@@ -53,6 +55,7 @@ const SignIn = () => {
             Sign In
           </Button>
         </form>
+        <Toaster/>
       </div>
     </div>
   );

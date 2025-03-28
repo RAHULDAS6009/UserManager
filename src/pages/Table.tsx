@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Modal } from "../components/generic/Modal";
 import { ProfileEdit } from "../components/ProfileEdit";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 const TableHead = () => (
   <thead className="text-xs text-gray-600 uppercase bg-indigo-100 border border-b-2 border-slate-200">
@@ -187,7 +188,7 @@ export const Table = () => {
           <div className="flex justify-end gap-2 mt-4">
             <button
               onClick={() => setDeleteOpen(false)}
-              className="px-4 py-2 bg-gray-300 rounded-md"
+              className="px-4 py-2 bg-gray-300 rounded-md cursor-pointer"
             >
               Cancel
             </button>
@@ -199,17 +200,29 @@ export const Table = () => {
                     `${backendUrl}/api/users/${selectedUser.id}`
                   );
                   setDeleteOpen(false);
+                  toast.success(`${selectedUser.first_name} deleted from the list`, {
+                    style: {
+                      border: '1px solid red',
+                      padding: '16px',
+                      color: 'red',
+                    },
+                    iconTheme: {
+                      primary: 'red',
+                      secondary: 'white',
+                    },
+                  });
                 } catch (error) {
                   console.error("Error deleting profile:", error);
                 }
               }}
-              className="px-4 py-2 bg-red-500 text-white rounded-md"
+              className="px-4 py-2 bg-red-500 text-white rounded-md cursor-pointer"
             >
               Delete
             </button>
           </div>
         </Modal>
       )}
+
     </div>
   );
 };
